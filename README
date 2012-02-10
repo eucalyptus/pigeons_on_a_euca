@@ -1,0 +1,87 @@
+###
+### PIGEONS_ON_A_EUCA: Eucalyptus Cloud Monitoring Application
+###
+### Original Developer: Kyo Lee
+###
+### Email: kyo.lee@eucalyptus.com
+###
+### Description: the application runs a script that periodically "tweets" the status of the cloud for sys.admins to follow.
+###
+###
+
+Installion Guide.
+
+1. Requirements:
+
+	Install Perl module "Net::Twitter::Lite"
+		Link: http://search.cpan.org/~mmims/Net-Twitter-Lite-0.10004/lib/Net/Twitter/Lite.pm
+
+		EX. In UBUNTU LUCID,
+			ADD the line:
+				deb http://ubuntu.mirror.cambrium.nl/ubuntu/ lucid main universe
+			to "/etc/apt/source.list"
+
+			INSTALL twitter-lite-perl:
+				aptitude install libnet-twitter-lite-perl
+
+	Install Euca2ools 2.0 or higher
+		Link: http://open.eucalyptus.com/downloads
+
+		Ex. In UBUNTU LUCID,
+			ADD the line:
+				deb http://downloads.eucalyptus.com/software/euca2ools/2.0/ubuntu lucid universe
+			to "/etc/apt/source.list"
+			*** The repository link might have been altered. Please check out the official euca2ools page above.
+
+			INSTALL euca2ools:
+				aptitude install euca2ools
+
+2. Untar the tarball "pigeons_on_a_euca.tar.gz" at a location of your choice.
+
+	tar zxvf pigeons_on_a_euca.tar.gz
+
+3. Insert your twitter application account's keys to the file "./pigeons_on_a_euca/pigeon_cage/keys/o_auth_settings.keys"
+
+	CONSUMER KEY=<your_consumer_key>
+	CONSUMER SECRET=<your_consumer_secret>
+	ACCESS TOKEN=<access_token>
+	ACCESS TOKEN SECRET=<access_token_secret>
+
+4. Run the script "tweet_it_away.pl" with a test tweet file to validate the setup so far.
+
+	cd ./pigeons_on_a_euca/pigeon_cage;
+	perl ./tweet_it_away.pl ./tweets/mytest.tweet
+
+5. Verify that the line "this is a test" was tweeted on your account.
+
+6. Go to the directory "./pigeons_on_a_euca/credentials" and store the cloud admin's credentails.
+
+	Files needed:
+		cloud-cert.pem euca2-admin-395c736c-cert.pem  euca2-admin-395c736c-pk.pem  eucarc  iamrc  jssecacerts
+
+7. Verify that the admin credentials are valid by running the command "source eucarc; euca-describe-availability-zones verbose"
+
+	EX.
+		user:~/pigeons_on_a_euca/credentials# source ./eucarc
+		user:~/pigeons_on_a_euca/credentials# euca-describe-availability-zones verbose
+		AVAILABILITYZONE	PARTI00	192.168.100.200 arn:euca:eucalyptus:PARTI00:cluster:CC_00/
+		AVAILABILITYZONE	|- vm types	free / max   cpu   ram  disk
+		AVAILABILITYZONE	|- m1.small	0003 / 0004   1    128     2
+		AVAILABILITYZONE	|- c1.medium	0003 / 0004   1    256     5
+		AVAILABILITYZONE	|- m1.large	0001 / 0002   2    512    10
+		AVAILABILITYZONE	|- m1.xlarge	0001 / 0002   2   1024    20
+		AVAILABILITYZONE	|- c1.xlarge	0000 / 0001   4   2048    20
+
+8. Run the script "activate_the_pigeons.pl"
+
+	perl ./activate_the_pigeons.pl
+
+   or have it run in the background,
+
+	nohup perl ./activate_the_pigeons.pl > stdout.log >> stderr.log &
+
+
+Thanks,
+
+Kyo
+
